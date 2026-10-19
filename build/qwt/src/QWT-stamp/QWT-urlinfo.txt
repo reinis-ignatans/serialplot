@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=/usr/bin/cmake;-P;/home/spade/src/serialplot/build/qwt/src/QWT-stamp/download-QWT.cmake;COMMAND;/usr/bin/cmake;-P;/home/spade/src/serialplot/build/qwt/src/QWT-stamp/verify-QWT.cmake;COMMAND;/usr/bin/cmake;-P;/home/spade/src/serialplot/build/qwt/src/QWT-stamp/extract-QWT.cmake
+source_dir=/home/spade/src/serialplot/build/qwt/src/QWT
+work_dir=/home/spade/src/serialplot/build/qwt/src
+url(s)=https://sourceforge.net/projects/qwt/files/qwt/6.3.0/qwt-6.3.0.tar.bz2
+hash=
+no_extract=
+

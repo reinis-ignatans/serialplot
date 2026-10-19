@@ -48,6 +48,7 @@
 #include "samplecounter.h"
 #include "datatextview.h"
 #include "bpslabel.h"
+#include "fftview.h"
 
 namespace Ui {
 class MainWindow;
@@ -80,6 +81,7 @@ private:
     // ChannelManager channelMan;
     Stream stream;
     PlotManager* plotMan;
+    FftView* fftView;
     QWidget* secondaryPlot;
     SnapshotManager snapshotMan;
     SampleCounter sampleCounter;

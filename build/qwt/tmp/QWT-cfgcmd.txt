@@ -1,0 +1,1 @@
+cmd='qmake6;<SOURCE_DIR>/qwt.pro'

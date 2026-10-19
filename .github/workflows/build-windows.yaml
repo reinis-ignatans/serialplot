@@ -1,0 +1,61 @@
+name: Build for Windows
+run-name: Windows build of ${{ github.ref_name }}
+
+# Runs on every push to any branch, and can be started by hand from the
+# "Actions" tab (Run workflow). Results are attached to the run as artifacts.
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      # Same Qt setup the upstream release workflow uses
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.4.0
+          modules: qtserialport
+          arch: win64_mingw
+
+      - name: Make sure NSIS (installer builder) is available
+        shell: pwsh
+        run: |
+          if (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
+            choco install nsis -y --no-progress
+            Add-Content $env:GITHUB_PATH "C:\Program Files (x86)\NSIS"
+          }
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -G 'Unix Makefiles' -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --parallel
+
+      # Portable version: serialplot.exe plus the Qt DLLs it needs, in one folder
+      - name: Collect portable files
+        run: cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/portable/serialplot
+
+      - name: Build installer
+        run: cmake --build ${{ github.workspace }}/build -t package
+
+      - name: Upload portable version
+        uses: actions/upload-artifact@v4
+        with:
+          name: serialplot-windows-portable
+          path: portable/
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: serialplot-windows-installer
+          path: build/*win64.exe
+          if-no-files-found: error

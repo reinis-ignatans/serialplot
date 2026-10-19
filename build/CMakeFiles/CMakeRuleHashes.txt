@@ -1,0 +1,18 @@
+# Hashes of file build rules.
+5890980f5cc0676f95b87bceb9e5575b CMakeFiles/QWT
+d44d39441714985a105b7e2c0e441dc0 CMakeFiles/QWT-complete
+e8b50822dbe7dc1e967d2fef38ea51f2 CMakeFiles/appimage
+b68d397edf2150eb2217ad49afa5905e CMakeFiles/run
+5890980f5cc0676f95b87bceb9e5575b CMakeFiles/serialplot_autogen
+5890980f5cc0676f95b87bceb9e5575b CMakeFiles/serialplot_autogen_timestamp_deps
+3620de9f367ec5c8afce4556e636627e CMakeFiles/uninstall
+65191b74334a97ac838b5ab40db5995e qrc_icons.cpp
+a9a6aefd6faae15cfaacc1626b571de4 qwt/src/QWT-stamp/QWT-build
+ef639b79c04b723fa92f14618e5d8421 qwt/src/QWT-stamp/QWT-configure
+d7b2db56c6e13bc6b720eca1808d7aec qwt/src/QWT-stamp/QWT-download
+c982d4641a424a39d4a42baa8d33ec2d qwt/src/QWT-stamp/QWT-install
+9df7c2b6d99afe3103ebf9fbc1e45c1f qwt/src/QWT-stamp/QWT-mkdir
+07555c3f0044876e5967a9d9904147b4 qwt/src/QWT-stamp/QWT-patch
+752e94749c84f17c1018297a2d8ef00c qwt/src/QWT-stamp/QWT-update
+fec271d507bf9f8e0839b2aaf46f383a serialplot_autogen/timestamp
+608e08ed85029d90abff73730b63c34b squashfs-root/AppRun

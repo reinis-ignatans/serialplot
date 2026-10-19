@@ -31,6 +31,7 @@
 #include <QtDebug>
 #include <QCommandLineParser>
 #include <QFileInfo>
+#include <QSplitter>
 #include <qwt_plot.h>
 #include <limits.h>
 #include <cmath>
@@ -79,6 +80,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     plotMan = new PlotManager(ui->plotArea, &plotMenu, &stream);
 
+    // FFT display, placed above the main plot in a vertical splitter
+    fftView = new FftView(&stream, &plotMenu);
+    auto plotSplitter = new QSplitter(Qt::Vertical);
+    plotSplitter->setChildrenCollapsible(false);
+    ui->splitter->insertWidget(0, plotSplitter);
+    plotSplitter->addWidget(fftView);
+    plotSplitter->addWidget(ui->plotArea); // moves plotArea into new splitter
+    plotSplitter->setStretchFactor(0, 1);
+    plotSplitter->setStretchFactor(1, 1);
+    ui->splitter->setStretchFactor(0, 1);
+
     ui->tabWidget->insertTab(0, &portControl, "Port");
     ui->tabWidget->insertTab(1, &dataFormatPanel, "Data Format");
     ui->tabWidget->insertTab(2, &plotControlPanel, "Plot");
@@ -91,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addToolBar(recordPanel.toolbar());
 
     ui->plotToolBar->addAction(snapshotMan.takeSnapshotAction());
+    ui->plotToolBar->addAction(fftView->toggleAction());
     menuBar()->insertMenu(ui->menuHelp->menuAction(), snapshotMan.menu());
     menuBar()->insertMenu(ui->menuHelp->menuAction(), commandPanel.menu());
 
@@ -107,6 +120,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // init view menu
     ui->menuBar->insertMenu(ui->menuSecondary->menuAction(), &plotMenu);
+    plotMenu.addSeparator();
+    plotMenu.addAction(fftView->toggleAction());
     plotMenu.addSeparator();
     QMenu* tbMenu = plotMenu.addMenu("Toolbars");
     tbMenu->addAction(ui->plotToolBar->toggleViewAction());
@@ -249,6 +264,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addPermanentWidget(&spsLabel);
     connect(&sampleCounter, &SampleCounter::spsChanged,
             this, &MainWindow::onSpsChanged);
+    connect(&sampleCounter, &SampleCounter::spsChanged,
+            fftView, &FftView::setMeasuredSampleRate);
 
     bpsLabel.setMinimumWidth(70);
     bpsLabel.setAlignment(Qt::AlignRight);
@@ -266,6 +283,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&dataFormatPanel, &DataFormatPanel::sourceChanged,
             this, &MainWindow::onSourceChanged);
     onSourceChanged(dataFormatPanel.activeSource());
+
+    // FFT view gets the same (decoded, gain/offset applied) data as the plot
+    stream.connectFollower(fftView);
 
     // load default settings
     QSettings settings(PROGRAM_NAME, PROGRAM_NAME);
@@ -390,6 +410,7 @@ void MainWindow::onSourceChanged(Source* source)
 void MainWindow::clearPlot()
 {
     stream.clear();
+    fftView->clear();
     plotMan->replot();
 }
 
@@ -536,6 +557,7 @@ void MainWindow::saveAllSettings(QSettings* settings)
     stream.saveSettings(settings);
     plotControlPanel.saveSettings(settings);
     plotMenu.saveSettings(settings);
+    fftView->saveSettings(settings);
     commandPanel.saveSettings(settings);
     recordPanel.saveSettings(settings);
     textView.saveSettings(settings);
@@ -550,6 +572,7 @@ void MainWindow::loadAllSettings(QSettings* settings)
     stream.loadSettings(settings);
     plotControlPanel.loadSettings(settings);
     plotMenu.loadSettings(settings);
+    fftView->loadSettings(settings);
     commandPanel.loadSettings(settings);
     recordPanel.loadSettings(settings);
     textView.loadSettings(settings);
