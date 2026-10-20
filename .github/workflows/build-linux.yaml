@@ -1,0 +1,55 @@
+name: Build for Linux
+run-name: Linux build of ${{ github.ref_name }}
+
+# Runs on every push to any branch, and can be started by hand from the
+# "Actions" tab (Run workflow). Results are attached to the run as artifacts.
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  linux:
+    # Same Ubuntu version and packages as the upstream release workflow.
+    # The .deb targets Ubuntu 24.04 (and newer); the AppImage runs on most
+    # distributions from the same era or newer.
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgl1-mesa-dev qt6-base-dev libqt6serialport6-dev libqt6svg6-dev \
+            libfuse2t64 file
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -G 'Unix Makefiles' -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --parallel
+
+      - name: Build .deb package
+        run: cmake --build ${{ github.workspace }}/build -t package
+
+      - name: Build AppImage
+        run: cmake --build ${{ github.workspace }}/build -t appimage
+
+      - name: Upload .deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: serialplot-linux-deb
+          path: build/*.deb
+          if-no-files-found: error
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: serialplot-linux-appimage
+          path: build/SerialPlot*.AppImage
+          if-no-files-found: error
