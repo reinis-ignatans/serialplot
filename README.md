@@ -2,8 +2,10 @@
 
 Small and simple software for plotting data and its fast Fourier transform (FFT) from serial port in realtime.
 This is a forked and modified SerialPlot version from the original creator: https://github.com/hyOzd/serialplot
+
 I have found SerialPlot highly useful in various instances, in my pinion, the only thing missing was a realtime FFT capability. 
-You will find FFT a real life-saver when working with weak periodic signals. 
+You will find FFT a real life-saver when working with weak periodic signals.
+
 This modification of SerialPlot has been developed while working on Latvian Council of Science project "New generation of piezoelectric materials for active vibration control" (LZP-2023/0571). The software was used to detect small oscillation in the laser-interferometer setup.
 
 
@@ -21,10 +23,8 @@ This modification of SerialPlot has been developed while working on Latvian Coun
 * Real time FFT of the incomming data streamTake snapshots of the current waveform and save to CSV file
 * FFT sample size between 1024 (for faster plotting) and 65536 (for more accurate readings) in steps of multiples by two
 * Choice of the most popular windowing functions for FFT
-* FFT scale choice between linear and dB, db is calculated as follows:
-$$
-\text{dB} = 20 \cdot \log_{10}\left(frac{V}{1}\right)
-$$
+* FFT scale choice between linear and dB, db is calculated as follows: $\text{dB} = 20 \cdot \log_{10}(V / 1)$.
+
 
 
 ## Installation
