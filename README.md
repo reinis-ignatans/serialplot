@@ -3,13 +3,15 @@
 Small and simple software for plotting data and its fast Fourier transform (FFT) from serial port in realtime.
 This is a forked and modified SerialPlot version from the original creator: https://github.com/hyOzd/serialplot
 
-I have found SerialPlot highly useful in various instances, in my pinion, the only thing missing was a realtime FFT capability. 
+I have found the original SerialPlot highly useful in various instances, in my pinion, the only thing missing was a realtime FFT capability, which I have added in this repo.
 You will find FFT a real life-saver when working with weak periodic signals.
 
-This modification of SerialPlot has been developed while working on Latvian Council of Science project "New generation of piezoelectric materials for active vibration control" (LZP-2023/0571). The software was used to detect small oscillation in the laser-interferometer setup.
+This modification of SerialPlot has been developed while working on Latvian Council of Science project "New generation of piezoelectric materials for active vibration control" (LZP-2023/0571). The software was used to detect small oscillations in the laser-interferometer setup with the help of a fast and precise ADC and a photodiode.
 
+SerialPlot works in both Windows and Linux environments. The first screenshot is from Linux version showing FFT in dB scale with a signal showing up at 1300 Hz. Bottom screenshot is from the Windows version showing the same signal in linear scale with wider frequency plot window.
 
 ![SerialPlot Screenshot](./misc/Screens_2.png)
+
 
 ## Features
 
@@ -23,13 +25,13 @@ This modification of SerialPlot has been developed while working on Latvian Coun
 * Real time FFT of the incomming data streamTake snapshots of the current waveform and save to CSV file
 * FFT sample size between 1024 (for faster plotting) and 65536 (for more accurate readings) in steps of multiples by two
 * Choice of the most popular windowing functions for FFT
-* FFT scale choice between linear and dB, db is calculated as follows: $\text{dB} = 20 \cdot \log_{10}(V / 1)$.
+* FFT scale choice between linear and dB, db is calculated as follows: $\text{dB} = 20 \cdot \log_{10}(V / 1)$. Where V is the measured incoming signal.
 
 
 
 ## Installation
 
-Check the releases page.
+Check the releases page. There are installers and portable versions for SerialPlot for both - Windows and Linux machines.
 
 ## Dependencies
 
